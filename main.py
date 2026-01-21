@@ -14,14 +14,15 @@ def main():
         if "ip" in info and not info["attack"]:
             log_event(
                 info["ip"],
-                info["count"],
+                info.get("failed_count", 0 ),
                 "Failed ssh  login "
             )
 
         # If attack detected
-        if info.get["attack"]:
-            block_ip(info["ip"], info["count"])
+        if info.get("attack"):
+            block_ip(info["ip"], info.get("failed_count"))
             log_alert(info)
         
 if __name__ == "__main__":
     main()
+    

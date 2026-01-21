@@ -7,7 +7,7 @@ EVENTS_FILE = DATA_DIR/"events.json"
 
 def load_events():
     "if events.json does not exits "
-    EVENTS_FILE.mkdir(exist_ok=True)
+    DATA_DIR.mkdir(exist_ok=True)
 
     """Load existing events from events.json"""
     if EVENTS_FILE.exists():
@@ -16,6 +16,9 @@ def load_events():
     return json.loads(EVENTS_FILE.read_text())  # store & return
 
 def save_events(events):
+    """if events.json does not exits """
+    DATA_DIR.mkdir(exist_ok=True)
+
     """Save events list to events.json"""
     EVENTS_FILE.write_text(json.dumps(events, indent=2))
 
