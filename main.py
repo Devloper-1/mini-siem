@@ -20,9 +20,13 @@ def main():
 
         # If attack detected
         if info.get("attack"):
-            block_ip(info["ip"], info.get("failed_count"))
+            block_ip(info["ip"])
             log_alert(info)
-        
+            log_event(
+                info["ip"],
+                info.get("failed_count", 0),
+                "ip_blocked"
+            )
 if __name__ == "__main__":
     main()
     
