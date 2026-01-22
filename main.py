@@ -7,26 +7,28 @@ from  events import log_event
 
 
 def main():
-    for line in monitor_log() :
-        info = parser_line(line)
+    try:
+        for line in monitor_log():
+            print("[LOG]", line)  # 👈 DEBUG
 
-        # If parser detected a failed login (but not attack yet)
-        if "ip" in info and not info["attack"]:
-            log_event(
-                info["ip"],
-                info.get("failed_count", 0 ),
-                "Failed ssh  login "
-            )
+            info = parser_line(line)
 
-        # If attack detected
-        if info.get("attack"):
-            block_ip(info["ip"])
-            log_alert(info)
-            log_event(
-                info["ip"],
-                info.get("failed_count", 0),
-                "ip_blocked"
-            )
+            if "ip" in info and not info["attack"]:
+                print("[INFO]", info)
+                log_event(
+                    info["ip"],
+                    info.get("failed_count", 0),
+                    "Failed SSH login"
+                )
+
+            if info.get("attack"):
+                print("[ATTACK]", info)
+                block_ip(info["ip"])
+                log_alert(info)
+
+    except KeyboardInterrupt:
+        print("\n[+] Mini-SIEM stopped")
+
 if __name__ == "__main__":
     main()
     
