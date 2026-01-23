@@ -23,7 +23,7 @@ def main():
 
             if info.get("attack"):
                 print("[ATTACK]", info)
-                block_ip(info["ip"])
+                block_ip(info["ip"] , info["failed_count"])
                 log_alert(info)
 
     except KeyboardInterrupt:
