@@ -7,7 +7,7 @@ failed_re = re.compile(r"Failed password",re.IGNORECASE)
 ip_re = re.compile(r"(\d+\.\d+\.\d+\.\d+)")
 
 #  cont attemp
-failed_attemp = {}
+failed_attemps = {}
 
 
 def parser_line(line):
@@ -22,8 +22,8 @@ def parser_line(line):
          # extract ip 
         ip= ip_match.group(1)
         # count failed login attemp 
-        failed_attemp[ip] = failed_attemp.get(ip,0) + 1
-        count = failed_attemp[ip]
+        failed_attemps[ip] = failed_attemps.get(ip,0) + 1
+        count = failed_attemps[ip]
 
          # retrun result main siem 
         return{

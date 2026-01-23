@@ -36,3 +36,4 @@ def log_event(ip, count, event_type):
 
     events.append(event_data)
     save_events(events)
+     

@@ -40,7 +40,7 @@ def block_ip(ip , failed_count):
     block_data = {
         "ip" : ip,
         "timestamp": datetime.now().strftime("%Y-%m-%d  %H.%m.%s"),
-        "failed_attempt": failed_count,
+        "failed_attempts": failed_count,
         "resoan":"Brout-Force"
     }
 
