@@ -3,6 +3,8 @@ from parser import parser_line
 from block import block_ip
 from alert import log_alert
 from  events import log_event
+from detector import record_failed_attempt , is_attack
+
 
 
 
@@ -13,19 +15,34 @@ def main():
 
             info = parser_line(line)
 
-            if "ip" in info and not info["attack"]:
-                print("[INFO]", info)
-                log_event(
-                    info["ip"],
-                    info.get("failed_count", 0),
-                    "Failed SSH login"
-                )
+            if "ip" not in info:
+                continue
+            ip = info[ip]
 
-            if info.get("attack"):
-                print("[ATTACK]", info)
-                block_ip(info["ip"] , info["failed_count"])
-                log_alert(info)
+            # Record failAttapem
+            attempt_count = record_failed_attempt(ip)
 
+            # Log after every fail
+            log_event(
+                ip,
+                attempt_count,
+                "Failed ssh login"
+            )
+
+            # check if this is an attack
+            if is_attack(ip):
+                print("[attacker]: ",ip,"[Failed_attempot]: ",attempt_count)
+
+                block_ip(ip,attempt_count)
+                log_alert({
+                    "ip": ip,
+                    "failed_attempt":attempt_count,
+                    "log_alert":log_alert(info)
+                })
+            else:
+              print("[INFO]", ip, "attempts:", attempt_count)
+
+                
     except KeyboardInterrupt:
         print("\n[+] Mini-SIEM stopped")
 
