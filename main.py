@@ -17,7 +17,7 @@ def main():
 
             if "ip" not in info:
                 continue
-            ip = info[ip]
+            ip = info["ip"]
 
             # Record failAttapem
             attempt_count = record_failed_attempt(ip)
@@ -37,7 +37,8 @@ def main():
                 log_alert({
                     "ip": ip,
                     "failed_attempt":attempt_count,
-                    "log_alert":log_alert(info)
+                    "attack_type": "BRUTE_FORCE",
+                    "severity": "HIGH"
                 })
             else:
               print("[INFO]", ip, "attempts:", attempt_count)

@@ -4,5 +4,10 @@ import json
 LOGFILE  = "logs/system.log"
 
 def log_alert(info):
+
+    alert = {
+        "TimeStamp" : datetime.now().isoformat(),
+        "Alert!": info
+    }
     with open(LOGFILE , "a") as f :
-        f.write(f"{datetime.now()} - ALERT : {info}\n")
+        f.write(json.dumps(alert)+"\n")
