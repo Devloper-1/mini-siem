@@ -2,7 +2,7 @@ import subprocess
 import json
 from pathlib import Path
 from datetime import datetime
-from events import load_events
+from events import load_event
 
 
 DATA_DIR =  Path("data")
@@ -40,16 +40,15 @@ def block_ip(ip , failed_count):
         print(f"[BLOCK] {ip} already blocked")
         return
 
-     # 2 add new ip 
+  # 2 add new ip 
     if ip not in blocked :
         # code for block ip
-        subprocess.run(["sudo","ufw","deny","from",ip,"to","any"] ),
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        # add in it 
-        blocked.append(ip)
-    else:
-      print(f"{ip} already blocked")
+        subprocess.run(
+            ["sudo","ufw","deny","from",ip,"to","any"] ,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+       
     
     block_data = {
         "ip" : ip,

@@ -28,7 +28,7 @@ def log_event(ip, count, event_type):
     events = load_events()
 
     event_data = {
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "timestamp": datetime.now().isoformat(),
         "ip": ip,
         "count": count,
         "event": event_type
