@@ -1,3 +1,4 @@
+# parser.py
 # re 
 import re 
 
@@ -10,16 +11,17 @@ ip_re = re.compile(r"(\d+\.\d+\.\d+\.\d+)")
 
 def parser_line(line):
     # extract ip if log failed 
-    if failed_re.search(line) :
+    if not failed_re.search(line) :
         return{}
     
     ip_match = ip_re.search(line)
+
     if not ip_match:
         return{}
-    ip = ip_match.group(1)
+    
 
     
     return {
-        "ip": ip,
+        "ip":ip_match.group(1),
         "event": "FAILED_SSH_LOGIN"
     }

@@ -1,3 +1,4 @@
+# monitor_log.py
 import subprocess
 
 LOGFILE = "/var/log/auth.log"

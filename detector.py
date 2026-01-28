@@ -1,9 +1,12 @@
+# detector.py
 import time
 
 TIME_WINDOW = 60 
 FAIL_THRESHOLD = 5 
 
 failed_attempts = {}
+
+blocked_ips = set()
 
 def record_failed_attempt(ip):
    """
@@ -26,6 +29,8 @@ def record_failed_attempt(ip):
 
 
 def is_attack(ip):
+    if ip in blocked_ips:
+       return False
     """
     Returns True if IP crosses threshold
     """

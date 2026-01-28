@@ -1,8 +1,9 @@
+# block.py
 import subprocess
 import json
 from pathlib import Path
 from datetime import datetime
-from events import load_event
+from events import log_event
 
 
 DATA_DIR =  Path("data")
@@ -41,12 +42,12 @@ def block_ip(ip , failed_count):
         return
 
   # 2 add new ip 
-    if ip not in blocked :
+    
         # code for block ip
-        subprocess.run(
-            ["sudo","ufw","deny","from",ip,"to","any"] ,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+    subprocess.run(
+         ["sudo","ufw","deny","from",ip,"to","any"] ,
+          stdout=subprocess.DEVNULL,
+          stderr=subprocess.DEVNULL,
         )
        
     
@@ -62,5 +63,5 @@ def block_ip(ip , failed_count):
     save_blocked(blocked)
     print(f"Blocked{ip}")
 
-    load_events(ip,failed_count,"IP_Blocked")
+    log_event(ip,failed_count,"IP_Blocked")
 
