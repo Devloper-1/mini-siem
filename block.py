@@ -32,36 +32,28 @@ def is_already_blocked(ip,blocked):
     return False
 
 
-def block_ip(ip , failed_count):
-    
-    # 1 load existen blocked ips 
+def block_ip(ip, failed_count):
     blocked = load_blocked()
 
     if is_already_blocked(ip, blocked):
         print(f"[BLOCK] {ip} already blocked")
         return
 
-  # 2 add new ip 
-    
-        # code for block ip
     subprocess.run(
-         ["sudo","ufw","deny","from",ip,"to","any"] ,
-          stdout=subprocess.DEVNULL,
-          stderr=subprocess.DEVNULL,
-        )
-       
-    
+        ["sudo", "ufw", "deny", "from", ip, "to", "any"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
     block_data = {
-        "ip" : ip,
+        "ip": ip,
         "timestamp": datetime.now().isoformat(),
         "failed_attempts": failed_count,
-        "resoan":"Brout-Force"
+        "reason": "BRUTE_FORCE"
     }
 
     blocked.append(block_data)
-    # save back to file 
     save_blocked(blocked)
-    print(f"Blocked{ip}")
 
-    log_event(ip,failed_count,"IP_Blocked")
-
+    print(f"[BLOCK] {ip} blocked")
+    log_event(ip, failed_count, "IP_BLOCKED")
