@@ -4,24 +4,31 @@ import re
 
 # detect  the text "fail password"
 failed_re = re.compile(r"Failed password",re.IGNORECASE)
+success_re = re.compile(r"Accepted password", re.IGNORECASE)
 # extract ip 
 ip_re = re.compile(r"(\d+\.\d+\.\d+\.\d+)")
 
 
 
-def parser_line(line):
-    # extract ip if log failed 
-    if not failed_re.search(line) :
-        return{}
-    
+def parser_log(line):
+
     ip_match = ip_re.search(line)
-
-    if not ip_match:
-        return{}
-    
+    ip = ip_match.group(1) if ip_match else None
 
     
-    return {
-        "ip":ip_match.group(1),
-        "event": "FAILED_SSH_LOGIN"
-    }
+    if "Failed password" in line :
+        return {"event": "FAILED_LOGIN",
+                "ip": ip ,
+            "severity": "medium",
+            "raw": line
+        }
+    
+    if "Accepted password" in line :
+        return {
+            "event": "LOGIN_SUCCESS",
+            "ip": ip,
+            "severity": "critical",
+            "raw": line
+        }
+    
+    return None 
