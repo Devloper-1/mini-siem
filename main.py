@@ -27,6 +27,7 @@ def main():
                   ip,
                   attempt_count,
                  "Failed ssh login"
+                  "service : ssh "
                 )
 
                # check if this is an attack
