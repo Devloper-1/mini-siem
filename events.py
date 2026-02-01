@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 
+
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR/"data"
 EVENTS_FILE = DATA_DIR/"events.json"
@@ -17,7 +18,19 @@ def load_events():
     if not EVENTS_FILE.exists():
        EVENTS_FILE.write_text("{}")
        return {}  # return empty list if file doesn't exist
-    return json.loads(EVENTS_FILE.read_text())  # store & return
+   
+    raw = EVENTS_FILE.read_text().strip()
+
+    # 🛡️ DEFENSE: empty file
+    if not raw:
+        return {}
+
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        # 🛡️ DEFENSE: corrupted file
+        print("[WARN] events.json corrupted, resetting")
+        return {}
 
 def save_events(events):
     """if events.json does not exits """
@@ -25,7 +38,11 @@ def save_events(events):
 
     """Save events list to events.json"""
     EVENTS_FILE.write_text(json.dumps(events, indent=2))
+
+
 def log_event(info, blocked=False):
+
+
     events = load_events()
     now = datetime.utcnow().isoformat()
 
