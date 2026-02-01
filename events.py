@@ -15,8 +15,8 @@ def load_events():
 
     """Load existing events from events.json"""
     if not EVENTS_FILE.exists():
-       EVENTS_FILE.write_text("[]")
-       return []  # return empty list if file doesn't exist
+       EVENTS_FILE.write_text("{}")
+       return {}  # return empty list if file doesn't exist
     return json.loads(EVENTS_FILE.read_text())  # store & return
 
 def save_events(events):
@@ -25,27 +25,44 @@ def save_events(events):
 
     """Save events list to events.json"""
     EVENTS_FILE.write_text(json.dumps(events, indent=2))
-
-def log_event(ip, count, event_type):
-    """Add a new event to events.json"""
+def log_event(info, blocked=False):
     events = load_events()
-    now = datetime.now().isoformat()
+    now = datetime.utcnow().isoformat()
 
-    for event in events :
-        if event["ip"] == ip and event["event"] == event_type :
-            events["count"] += 1 
-            events["last_seen"] = now
-            save_events(events)
-            return 
-        
-    event_data = {
-        "ip": ip,
-        "count": count,
-        "event": event_type,
-        "first_seen": now,
-        "last_seen": now
-    }
+    ip = info["ip"]
+    service = info.get("service", "unknown")
+    user = info.get("user", "unknown")
+    event_type = info["event"]
 
-    events.append(event_data)
+    # 1️⃣ Create profile if new IP
+    if ip not in events:
+        events[ip] = {
+            "ip": ip,
+            "service": service,
+            "failed_count": 0,
+            "success_count": 0,
+            "unique_users": [],
+            "first_seen": now,
+            "last_seen": now,
+            "blocked": False
+        }
+
+    # 2️⃣ Update counters
+    if event_type == "FAILED_LOGIN":
+        events[ip]["failed_count"] += 1
+
+    elif event_type == "LOGIN_SUCCESS":
+        events[ip]["success_count"] += 1
+
+    # 3️⃣ Track unique users
+    if user not in events[ip]["unique_users"]:
+        events[ip]["unique_users"].append(user)
+
+    # 4️⃣ Update timestamps
+    events[ip]["last_seen"] = now
+
+    # 5️⃣ Update blocked state
+    if blocked:
+        events[ip]["blocked"] = True
+
     save_events(events)
-     

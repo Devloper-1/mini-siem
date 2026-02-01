@@ -23,12 +23,8 @@ def main():
                attempt_count = record_failed_attempt(ip)
 
                # Log after every fail
-               log_event(
-                  ip,
-                  attempt_count,
-                 "Failed ssh login"
-                  "service : ssh "
-                )
+               log_event(info, blocked=is_attack(ip))
+                
 
                # check if this is an attack
                if is_attack(ip):
