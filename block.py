@@ -18,8 +18,19 @@ def load_blocked():
     if not  BLOCKED_FILE.exists():
         BLOCKED_FILE.write_text("[]")
         return []
-        
-    return json.loads(BLOCKED_FILE.read_text())
+     
+    raw = BLOCKED_FILE.read_text().strip()
+
+    # 🛡️ DEFENSE: empty file
+    if not raw:
+        return {}
+
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        # 🛡️ DEFENSE: corrupted file
+        print("[WARN] Blocked.json corrupted, resetting")
+        return {}
 
 def save_blocked(blocked):
     BLOCKED_FILE.write_text(json.dumps(blocked , indent=2))
