@@ -16,7 +16,7 @@ def parser_log(line):
     ip_match = ip_re.search(line)
     user_match = user_re.search(line)
 
-    if not match:
+    if not ip_match :
         return None
     
     ip = ip_match.group(1) if ip_match else None
