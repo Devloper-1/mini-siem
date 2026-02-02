@@ -26,7 +26,14 @@ def load_events():
         return {}
 
     try:
-        return json.loads(raw)
+        data = json.loads(raw)
+
+        # 🛡️ DEFENSE: old format (list) → reset
+        if isinstance(data, list):
+            print("[WARN] events.json old format (list), migrating to dict")
+            return {}
+
+        return data
     except json.JSONDecodeError:
         # 🛡️ DEFENSE: corrupted file
         print("[WARN] events.json corrupted, resetting")
