@@ -67,4 +67,12 @@ def block_ip(ip, failed_count):
     save_blocked(blocked)
 
     print(f"[BLOCK] {ip} blocked")
-    log_event(ip, failed_count, "IP_BLOCKED")
+
+
+        # ✅ Correct log_event usage
+    log_event({
+        "ip": ip,
+        "event": "IP_BLOCKED",
+        "user": "system",
+        "service": "ssh"
+    }, blocked=True)
