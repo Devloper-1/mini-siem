@@ -51,7 +51,7 @@ def log_event(info, blocked=False):
 
 
     events = load_events()
-    now = datetime.utcnow().isoformat()
+    now = datetime.now().isoformat()
 
     ip = info["ip"]
     service = info.get("service", "unknown")
