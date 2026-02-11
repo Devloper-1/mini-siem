@@ -7,7 +7,7 @@ def classify_attack(event):
     severity = "LOW"
 
     fail_count = event.get("fail_count" , 0)
-    success = event.get("success_count",False)
+    success = event.get("success",False)
     unique_users = event.get("unique_users",1)
 
     

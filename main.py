@@ -26,6 +26,7 @@ def main():
                event = {
                     "ip": ip,
                     "user": user,
+                    "event": "FAILED_LOGIN",
                     "fail_count": attempt_count,
                     "success": False,
                     "unique_users": 1  
@@ -59,6 +60,7 @@ def main():
               event = {
                     "ip": ip,
                     "user": user,
+                    "event": "FAILED_LOGIN",   
                     "fail_count": 0,
                     "success": True,
                     "unique_users": 1
