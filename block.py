@@ -43,7 +43,7 @@ def is_already_blocked(ip,blocked):
     return False
 
 
-def block_ip(ip, failed_count):
+def block_ip(ip, failed_count ,event):
     blocked = load_blocked()
 
     if is_already_blocked(ip, blocked):
@@ -60,7 +60,8 @@ def block_ip(ip, failed_count):
         "ip": ip,
         "timestamp": datetime.now().isoformat(),
         "failed_attempts": failed_count,
-        "reason": "BRUTE_FORCE"
+        "attack_type": event.get("attack_type"),
+        "severity": event.get("severity")
     }
 
     blocked.append(block_data)
