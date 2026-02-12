@@ -44,7 +44,7 @@ def main():
                if is_attack(ip):
                    print("[attacker]: ",ip,"[Failed_attempot]: ",attempt_count)
      
-                   block_ip(ip,attempt_count)
+                   block_ip(ip,attempt_count,event)
                    blocked_ips.add(ip)
                    log_alert(event)
                else:
