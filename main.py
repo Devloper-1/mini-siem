@@ -60,7 +60,7 @@ def main():
               event = {
                     "ip": ip,
                     "user": user,
-                    "event": "FAILED_LOGIN",   
+                    "event": "LOGIN_SUCCESS",   
                     "fail_count": 0,
                     "success": True,
                     "unique_users": 1
