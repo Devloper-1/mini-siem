@@ -23,7 +23,7 @@ def load_blocked():
 
     # 🛡️ DEFENSE: empty file
     if not raw:
-        return {}
+        return []
 
     try:
         return json.loads(raw)

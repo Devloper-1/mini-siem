@@ -1,5 +1,8 @@
 # detector.py
+import json
+from datetime import datetime
 import time
+
 
 TIME_WINDOW = 60 
 FAIL_THRESHOLD = 5 
@@ -35,3 +38,24 @@ def is_attack(ip):
     Returns True if IP crosses threshold
     """
     return len(failed_attempts.get(ip, [])) >= FAIL_THRESHOLD
+
+def record_sucess(ip , username , fail_count):
+
+   event = {
+      "ip": ip,
+        "username": username,
+        "time": datetime.now().isoformat(),
+        "fail_attemp": fail_count
+   }
+
+   try:
+      with open("success_log.json", "r") as f:
+         data = json.load(f)
+
+   except:
+      data = []
+
+   data.append(event)
+
+   with open("success_log.json" , "w") as f:
+      json.dump(data,f,indent=4)

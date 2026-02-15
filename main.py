@@ -6,6 +6,7 @@ from alert import log_alert
 from  events import log_event
 from detector import record_failed_attempt , is_attack , blocked_ips
 from classifier import classify_attack
+from detector import failed_attempts , record_sucess
 
 
 def main():
@@ -56,23 +57,29 @@ def main():
                
               ip = info["ip"]
               user = info["user"]
-
+              previous_fail = len(failed_attempts.get(ip,[]))
               event = {
                     "ip": ip,
                     "user": user,
                     "event": "LOGIN_SUCCESS",   
-                    "fail_count": 0,
+                    "fail_count": previous_fail,
                     "success": True,
                     "unique_users": 1
                 }
               
+              record_sucess(ip, user, previous_fail)
+
               classification = classify_attack(event)
               event.update(classification)
+
 
               log_event(event, blocked=False)
               log_alert(event)
 
               print("🚨 CRITICAL: SSH LOGIN SUCCESS 🚨")
+              
+              # ✅ CLEAR OLD FAIL HISTORY AFTER SUCCESS
+              failed_attempts.pop(ip, None)
     
               
     except KeyboardInterrupt:
