@@ -40,10 +40,8 @@ def load_events():
         return {}
 
 def save_events(events):
-    """if events.json does not exits """
+    """Save events dict to events.json"""
     DATA_DIR.mkdir(exist_ok=True)
-
-    """Save events list to events.json"""
     EVENTS_FILE.write_text(json.dumps(events, indent=2))
 
 
