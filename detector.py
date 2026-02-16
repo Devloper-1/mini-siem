@@ -11,6 +11,9 @@ failed_attempts = {}
 
 blocked_ips = set()
 
+total_failures = {}
+
+
 def record_failed_attempt(ip):
    """
     Records a failed attempt and returns count within time window
@@ -19,8 +22,13 @@ def record_failed_attempt(ip):
 
    if ip  not in failed_attempts:
       failed_attempts[ip] = []
+   
+   if ip not in total_failures:
+      total_failures[ip] = 0
+
 
    failed_attempts[ip].append(now)
+   total_failures[ip] +=1
 
 
  #    for removing old ip if its pass time limite

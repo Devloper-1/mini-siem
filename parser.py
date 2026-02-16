@@ -7,7 +7,7 @@ failed_re = re.compile(r"Failed password",re.IGNORECASE)
 success_re = re.compile(r"Accepted password", re.IGNORECASE)
 # extract ip 
 ip_re = re.compile(r"(\d+\.\d+\.\d+\.\d+)")
-user_re = re.compile(r"for(invalide user)?(\w+)")
+user_re = re.compile(r"for (?:invalid user )?(\w+)")
 
 
 
@@ -23,21 +23,21 @@ def parser_log(line):
     user = user_match.group(1) if user_match else "unknown"
 
     
-    if "Failed password" in line :
-       if "Failed password" in line:
-        return {
-            "event": "FAILED_LOGIN",
-            "ip": ip_match.group(1),
-            "user": user,
-            "service": "ssh"
+    if failed_re.search(line):
+     return {
+         "event": "FAILED_LOGIN",
+         "ip": ip,
+         "user": user,
+         "service": "ssh"
         }
 
-    if "Accepted password" in line:
-        return {
-            "event": "LOGIN_SUCCESS",
-            "ip": ip_match.group(1),
-            "user": user,
-            "service": "ssh"
+    if success_re.search(line):
+      return {
+         "event": "LOGIN_SUCCESS",
+         "ip": ip,
+         "user": user,
+         "service": "ssh"
         }
+
     
     return None 

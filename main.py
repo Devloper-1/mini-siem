@@ -6,7 +6,7 @@ from alert import log_alert
 from  events import log_event
 from detector import record_failed_attempt , is_attack , blocked_ips
 from classifier import classify_attack
-from detector import failed_attempts , record_sucess
+from detector import failed_attempts , record_sucess , total_failures
 
 
 def main():
@@ -57,7 +57,7 @@ def main():
                
               ip = info["ip"]
               user = info["user"]
-              previous_fail = len(failed_attempts.get(ip,[]))
+              previous_fail = total_failures.get(ip ,0)
               event = {
                     "ip": ip,
                     "user": user,
@@ -80,6 +80,7 @@ def main():
               
               # ✅ CLEAR OLD FAIL HISTORY AFTER SUCCESS
               failed_attempts.pop(ip, None)
+              total_failures.pop(ip,None)
     
               
     except KeyboardInterrupt:
