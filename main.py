@@ -6,7 +6,7 @@ from alert import log_alert
 from  events import log_event
 from detector import record_failed_attempt , is_attack , blocked_ips
 from classifier import classify_attack
-from detector import failed_attempts , record_sucess , total_failures
+from detector import failed_attempts , record_sucess , total_failures , unique_users
 
 
 def main():
@@ -30,7 +30,7 @@ def main():
                     "event": "FAILED_LOGIN",
                     "fail_count": attempt_count,
                     "success": False,
-                    "unique_users": 1  
+                    "unique_users": len(unique_users.get(ip,[]))
                 }
                
                # Classify attack
@@ -64,7 +64,7 @@ def main():
                     "event": "LOGIN_SUCCESS",   
                     "fail_count": previous_fail,
                     "success": True,
-                    "unique_users": 1
+                    "unique_users": len(unique_users.get(ip,[]))
                 }
               
               record_sucess(ip, user, previous_fail)
