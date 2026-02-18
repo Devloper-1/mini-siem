@@ -49,6 +49,7 @@ def record_failed_attempt(ip,user):
 def is_attack(ip):
     if ip in blocked_ips:
        return False
+    print("DEBUG total_failures:", total_failures.get(ip))
     """
     Returns True if IP crosses threshold
     """

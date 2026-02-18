@@ -54,6 +54,12 @@ def main():
               # ---- SUCCESSFUL LOGIN (CRITICAL) ----
 
             elif info["event"] == "LOGIN_SUCCESS":
+              # If critical compromise → block IP
+              if event["attack_type"] == "POSSIBLE_COMPROMISE":
+                  print("[AUTO-RESPONSE] Blocking compromised IP:", ip)
+                  block_ip(ip, previous_fail, event)
+                  blocked_ips.add(ip)
+
                
               ip = info["ip"]
               user = info["user"]
