@@ -23,7 +23,7 @@ def main():
             if info["event"] == "FAILED_LOGIN":
                ip = info["ip"]
                user = info["user"]
-               attempt_count = record_failed_attempt(ip)
+               attempt_count = record_failed_attempt(ip,user)
                event = {
                     "ip": ip,
                     "user": user,
@@ -38,7 +38,7 @@ def main():
                event.update(classification)
 
                # Log after every fail
-               log_event(info, blocked=is_attack(ip))
+               log_event(event, blocked=is_attack(ip))
                 
 
                # check if this is an attack
