@@ -4,7 +4,7 @@ from datetime import datetime
 import time
 
 
-TIME_WINDOW = 60 
+TIME_WINDOW = 86400
 FAIL_THRESHOLD = 5 
 
 failed_attempts = {}
@@ -49,10 +49,11 @@ def record_failed_attempt(ip,user):
 def is_attack(ip):
     if ip in blocked_ips:
        return False
-    print("DEBUG total_failures:", total_failures.get(ip))
+
     """
     Returns True if IP crosses threshold
     """
+    print("DEBUG total_failures:", total_failures.get(ip))
     return len(failed_attempts.get(ip, [])) >= FAIL_THRESHOLD
 
 def record_sucess(ip , username , fail_count):
@@ -75,3 +76,4 @@ def record_sucess(ip , username , fail_count):
 
    with open("success_log.json" , "w") as f:
       json.dump(data,f,indent=4)
+ 
